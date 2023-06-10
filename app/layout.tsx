@@ -1,3 +1,4 @@
+import AppTheme from '@/context/app-theme'
 import './globals.css'
 import { Jost } from 'next/font/google'
 
@@ -15,7 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={jfont.className}>{children}</body>
+      <body className={jfont.className}>
+        <AppTheme>
+          {children}
+        </AppTheme>
+      </body>
     </html>
   )
 }

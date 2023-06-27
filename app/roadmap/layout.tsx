@@ -1,6 +1,8 @@
-const metadata = {
-    title: 'roadmap',
-    description: 'Roadmap'
+import { Metadata } from "next";
+
+export const metadata:Metadata = {
+    title: 'Roadmap',
+    description: 'Suggestions queued waiting for development'
 }
 
 interface IProps {

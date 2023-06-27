@@ -1,8 +1,8 @@
 import { useRouter } from "next/navigation";
-import { sugProps } from "./card-tabletplus";
+import { sugProps } from "./suggestions-tablet";
 import { useProps } from "@/context/app-theme";
 
-export const CardMobile = ({id, upvotes, title, description, category, comment, isToggled}:sugProps) => {
+export const SuggestionsMobile = ({id, upvotes, title, description, category, comment, isToggled}:sugProps) => {
 
     const router = useRouter();
     const {datastore, setDatastore} = useProps();
@@ -21,7 +21,7 @@ export const CardMobile = ({id, upvotes, title, description, category, comment, 
         
         return (
             <header className="cursor-pointer px-6 py-6 bg-white rounded-lg flex flex-col tablet:hidden">
-            <div onClick={() => router.push(`/details/${id}`)} className="flex flex-col">
+            <div onClick={() => router.push(`/detail/${id}`)} className="flex flex-col">
                 <h3 className='leading-26 mb-2 tracking-closer text-xSlate-600 text-13x font-bold'>{title}</h3>
                 <p className="mt-1 mb-2.5 text-13x font-normal text-xSlate-500">{description}</p>
                 <div className="flex items-start mb-3.5">

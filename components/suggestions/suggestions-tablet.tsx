@@ -1,6 +1,5 @@
 import { useProps } from "@/context/app-theme";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 
 export interface sugProps {
@@ -17,7 +16,7 @@ export interface sugProps {
 }
 
 
-export const CardTabletPlus = ({id, upvotes, title, description, category, comment, isToggled}:sugProps) =>{
+export const SuggestionsTablet = ({id, upvotes, title, description, category, comment, isToggled}:sugProps) =>{
 
   const {datastore, setDatastore} = useProps();
   const router = useRouter();
@@ -49,7 +48,7 @@ const Vote = (addORsub:boolean):void => {
               </div>
             </div>
           </div>
-          <div onClick={() => router.push(`/details/${id}`)} className="ml-10 flex-1 flex flex-col">
+          <div onClick={() => router.push(`/detail/${id}`)} className="ml-10 flex-1 flex flex-col">
               <h3 className='leading-26 tracking-closer text-xSlate-600 hover:text-xIndigo-600 text-26x font-bold'>{title}</h3>
               <p className="mt-1 mb-3 text-16x font-normal text-xSlate-500 leading-23">{description}</p>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState} from "react";
+import { createContext, useContext, useState} from "react";
 import metadata from '../data.json';
 
 
@@ -14,7 +14,8 @@ const AppContext = createContext(null);
 export default function AppTheme({children}:{children: React.ReactNode}){
 
     // add toggle state to JSON file
-    const database = metadata.productRequests.map(row => ({...row,isToggled:false}))
+    const database = metadata.productRequests.map(item => ({...item,isToggled:false, comments: !item.comments ? []: item.comments }))
+    const {currentUser} = metadata
     const [datastore, setDatastore] = useState(database);
      
 
@@ -36,7 +37,7 @@ export default function AppTheme({children}:{children: React.ReactNode}){
         <AppContext.Provider
             value={{
                 datastore, setDatastore,
-                statics,
+                statics, currentUser
 
             }}
 

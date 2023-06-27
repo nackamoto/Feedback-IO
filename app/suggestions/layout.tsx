@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata:Metadata = {
-    title: 'suggestions',
+    title: 'Suggestions',
     description: ''
 }
 interface IProps {

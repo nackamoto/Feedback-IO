@@ -1,5 +1,7 @@
-const metadata = {
-    title: 'Add Feedback',
+import { Metadata } from "next";
+
+export const metadata:Metadata = {
+    title: 'Add feedback',
     description: 'Add new feedback'
 }
 

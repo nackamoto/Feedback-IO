@@ -2,12 +2,12 @@
 import { useProps } from "@/context/app-theme";
 import { useParams, useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useState } from "react";
+
 
 
 interface Input{
     title: string,
-    category: string,
-    status: string,
     description:string
 }
 
@@ -21,18 +21,23 @@ export default function EditFeedback(){
     const empty =  [{title: '', category: '', status: '', description: ''}]   
     const [metadata] = datastore.filter(ev => ev.id.toString() === id)
 
-    const {title, category, status, description}:Input = !metadata ? empty : metadata
+    const {title, description}:Input = !metadata ? empty : metadata
 
     const {register, watch, handleSubmit, formState: {errors}} = useForm({defaultValues: {
         title: title,
-        category: category,
-        status: status,
         description: description
     }});
 
+    const [SelectedCategory, setSelectedCategory] = useState<string>('Feature');
+    const [Category, setCategory] = useState<string>('feature');
+
+    const [SelectedStatus, setSelectedStatus] = useState<string>('Live');
+    const [Status, setStatus] = useState<string>('live');
 
     const onSubmit:SubmitHandler<Input> = (data) => {
-        const updateStore = datastore.map(ev => ev.id.toString() === id ? {...ev, ...data}: ev)
+        const updateStore = datastore.map(ev => ev.id.toString() === id ? 
+        {...ev, ...data, category: Category, status: Status}: 
+        ev)
         setDatastore(updateStore)
         console.log(`edit feedback with title: \'${title}\'`)   
 
@@ -46,7 +51,16 @@ export default function EditFeedback(){
             console.log(`deleted feedback with id ${id}`)   
     }
 
+    const useCategory = (selected:string, category:string) => {
+        setSelectedCategory(selected)
+        setCategory(category)
+    }
     
+    const useStatus = (selected:string, status:string) => {
+        setSelectedStatus(selected)
+        setStatus(status)
+    }
+
     return (
         <main className="h-screen w-screen px-6 pt-8 pb-20 tablet:pt-14 tablet:px-28 tablet:pb-32 desktop:px-96 desktop:pt-24 desktop:pb-48 overflow-auto">
             <section className="relative">
@@ -78,31 +92,91 @@ export default function EditFeedback(){
 
                     </div>
 
-                    <div>
+                    <div className="w-full">
                         <h1 className="leading-20 tracking-close font-bold text-13x tablet:text-14x text-xSlate-600">Category</h1>
                         <label className="text-13x tablet:text-14x font-normal text-xSlate-500">Choose a category for your feedback</label>
-                        <div className="h-12 mt-4">
-                            <select {...register('category', {required: true})} className="mt-4 rounded-md bg-xSlate-50 px-6 py-3 text-13x tablet:text-15x text-xSlate-600 divide-x outline-none block w-full cursor-pointer focus:ring-xIndigo-600 focus:border focus:border-xIndigo-600">
-                                <option value="feature">Feature</option>
-                                <option value="ui">UI</option>
-                                <option value="ux">UX</option>
-                                <option value="enhancement">Enhancement</option>
-                                <option value="bug">Bug</option>
-                            </select>
-                        </div>
+
+                        <button type='button' id='editCatToggle' data-dropdown-toggle="categoryDrop" className="w-full mt-4 px-6 py-3 flex bg-xSiolet-50 items-center justify-between rounded-md">
+                            <span className="font-normal text-15x text-xSlate-600 ">{SelectedCategory}</span>
+                            <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 6l4-4 4 4" stroke="#4661E6" strokeWidth="2" fill="none" fillRule="evenodd"/></svg>
+                        </button>
+
+                        <ul id='categoryDrop' aria-labelledby="editCatToggle" className="z-10 hidden text-16x bg-white shadow-xl text-xSlate-500 rounded-lg divide-y">
+                                <li onClick={() => useCategory('Feature','feature')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                    <span className="">Feature</span>
+                                    <span className="pl-60">
+                                        {Category === 'feature' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
+                                    </span>
+                                </li>
+
+                                <li onClick={() => useCategory('UI','ui')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                    <span className="">UI</span>
+                                    <span className="pl-60">
+                                        {Category === 'ui' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
+                                    </span>
+                                </li>
+                                <li onClick={() => useCategory('UX','ux')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                    <span className="">UX</span>
+                                    <span className="pl-60">
+                                        {Category === 'ux' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
+                                    </span>
+                                </li>
+                                <li onClick={() => useCategory('Enhancement','enhancement')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                    <span className="">Enhancement</span>
+                                    <span className="pl-60">
+                                        {Category === 'enhancement' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
+                                    </span>
+                                </li>
+                                <li onClick={() => useCategory('Bug','bug')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                    <span className="">Bug</span>
+                                    <span className="pl-60">
+                                        {Category === 'bug' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
+                                    </span>
+                                </li>
+
+                            </ul>
+
+
                     </div>
 
-                    <div>
+                    <div className="w-full">
                         <h1 className="leading-20 tracking-close font-bold text-13x tablet:text-14x text-xSlate-600">Update Status</h1>
                         <label className="text-13x tablet:text-14x font-normal text-xSlate-500">Change feedback status</label>
-                        <div className="h-12 mt-4">
-                            <select {...register('status', {required: true})} className="mt-4 rounded-md bg-xSlate-50 px-6 py-3 text-13x tablet:text-15x text-xSlate-600 divide-x outline-none block w-full cursor-pointer focus:ring-xIndigo-600 focus:border focus:border-xIndigo-600">
-                                <option value="suggestion">Suggestion</option>
-                                <option value="planned">Planned</option>
-                                <option value="in-progress">In-Progress</option>
-                                <option value="live">Live</option>
-                            </select>
-                        </div>
+
+
+                        <button type='button' id='editStatToggle' data-dropdown-toggle="statusDrop" className="w-full mt-4 px-6 py-3 flex bg-xSiolet-50 items-center justify-between rounded-md">
+                            <span className="font-normal text-15x text-xSlate-600 ">{SelectedStatus}</span>
+                            <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 6l4-4 4 4" stroke="#4661E6" strokeWidth="2" fill="none" fillRule="evenodd"/></svg>
+                        </button>
+
+                        <ul id='statusDrop' aria-labelledby="editStatToggle" className="z-10 hidden text-16x bg-white shadow-xl text-xSlate-500 rounded-lg divide-y">
+                            <li onClick={() => useStatus('Suggestion','suggestion')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                <span className="">Suggestion</span>
+                                <span className="pl-60">
+                                    {Status === 'suggestion' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
+                                </span>
+                            </li>
+                            <li onClick={() => useStatus('Planned','planned')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                <span className="">Planned</span>
+                                <span className="pl-60">
+                                    {Status === 'planned' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
+                                </span>
+                            </li>
+                            <li onClick={() => useStatus('In-Progress','in-progress')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                <span className="">In-Progress</span>
+                                <span className="pl-60">
+                                    {Status === 'in-progress' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
+                                </span>
+                            </li>
+                            <li onClick={()  => useStatus('Live','live')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                <span className="">Live</span>
+                                <span className="pl-60">
+                                    {Status === 'live' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
+                                </span>
+                            </li>
+
+                        </ul>
+
                     </div>
 
                     <div>

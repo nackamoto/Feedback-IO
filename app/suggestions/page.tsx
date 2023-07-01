@@ -5,21 +5,21 @@ import { useProps } from "@/context/app-theme";
 import { sugProps } from "@/components/suggestions/suggestions-tablet";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Feedback404 } from "@/components/suggestions/no-feedback";
 
 
 export default function SuggestionPage(){
 
   const router = useRouter();
+  const sortRef = useRef(null);
   
-  const { datastore, setDatastore, statics: {nLive, nProgress, nPlanned}, } = useProps();
+  const { datastore, setSortby, Sortby,  statics: {nLive, nProgress, nPlanned}, } = useProps();
   
   
 
   
   const [filterBy, setFilterBy] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<string>("more");
 
 
 
@@ -212,6 +212,7 @@ export default function SuggestionPage(){
 
 
         <section className="flex-1 flex flex-col space-y-6 w-full">
+
           <header className="relative flex bg-xSlate-700  tablet:space-x-9 py-2 px-6 tablet:pl-6 tablet:pr-4 rounded-none tablet:rounded-lg  items-center"> {/*here*/}
             <div className="mobile:hidden tablet:first:flex space-x-4 items-center text-white py-6">
               <span>
@@ -219,21 +220,54 @@ export default function SuggestionPage(){
               </span>
               <h3 className="font-bold text-18x leading-26 tracking-closer">{Suggestions.length}&nbsp;Suggestions</h3>
             </div>
-            <div className="flex-1 flex text-xSiolet-50 items-center">
-              <span className="font-normal text-13x tablet:text-14x hover:cursor-pointer ">Sort by&nbsp;:&nbsp;</span>
-              <h4 className="font-bold text-13x tablet:text-14x mr-2 leading-20 tracking-close">Most Upvotes</h4>
-              <span>
-                <svg className="h-2 w-2" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="white" strokeWidth="2"/></svg>
-              </span>
+            <div  className="flex-1 flex text-xSiolet-50 items-center">
+              <button type='button' id="selectbox" data-dropdown-toggle="dropdown" className="font-normal text-13x text-xSiolet-50 tablet:text-14x cursor-pointer">Sort by&nbsp;:&nbsp;</button>
+              <div  className="flex items-center">
+                <h4 className="font-bold text-13x text-xSiolet-50 tablet:text-14x mr-2 leading-20 tracking-close">{Sortby}</h4>
+                <span ref={sortRef}>
+                  <svg className="h-2 w-2" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="white" strokeWidth="2"/></svg>
+                </span>
+              </div>
+
             </div>
+
+              <ul id='dropdown' aria-labelledby="selectbox" className="hidden  text-16x font-normal rounded-lg bg-white text-xSlate-500  shadow-xl divide-y">
+
+                <li className='flex items-center hover:text-xFuchisia-600 cursor-pointer justify-between px-6 py-3 ' onClick={() => setSortby('Most Upvotes')}>
+                  <span className="mr-24">Most Upvotes</span>
+                  <span>
+                    {Sortby === 'Most Upvotes' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
+                  </span>
+                </li>
+                <li className='flex items-center hover:text-xFuchisia-600 cursor-pointer justify-between px-6 py-3 ' onClick={() => setSortby('Least Upvotes')}>
+                  <span className="mr-24">Least Upvotes</span>
+                  <span>
+                    {Sortby === 'Least Upvotes' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
+                  </span>
+
+                </li>
+                <li className='flex items-center hover:text-xFuchisia-600 cursor-pointer justify-between px-6 py-3 ' onClick={() => setSortby('Most Comments')}>
+                  <span className="mr-24">Most Comments</span>
+                  <span>
+                    {Sortby === 'Most Comments' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
+                  </span>
+
+                </li>
+                <li className='flex items-center hover:text-xFuchisia-600 cursor-pointer justify-between px-6 py-3 ' onClick={() => setSortby('Least Comments')}>
+                  <span className="mr-24">Least Comments</span>
+                  <span>
+                    {Sortby === 'Least Comments' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
+                  </span>
+                  
+                </li>
+                
+              </ul>
 
             <button onClick={() => router.push('/add')} className="flex px-4 py-2  tablet:px-6 tablet:py-3 items-center bg-xFuchisia-600 hover:bg-fuchsia-500 hover:cursor-pointer  rounded-lg">
               <h2 className="font-bold text-13x tablet:text-14x text-xSiolet-50 leading-20 tracking-closest ">+ Add Feedback</h2>
             </button>
 
           </header>
-
-          
 
           
           <div className={`hidden tablet:flex flex-col ${Suggestions.length < 1 ? "space-y-0 overflow-scroll": "space-y-4 overflow-y-auto"}`}>

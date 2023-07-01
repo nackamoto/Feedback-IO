@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState} from "react";
+import { createContext, useContext, useEffect, useState} from "react";
+import { FC, PropsWithChildren } from "react";
 import metadata from '../data.json';
 
 
@@ -17,8 +18,34 @@ export default function AppTheme({children}:{children: React.ReactNode}){
     const database = metadata.productRequests.map(item => ({...item,isToggled:false, comments: !item.comments ? []: item.comments }))
     const {currentUser} = metadata
     const [datastore, setDatastore] = useState(database);
-     
 
+    const [Sortby, setSortby] = useState('Most Upvotes');
+     
+    useEffect(() => {
+        switch (Sortby) {
+            case 'Most Upvotes':
+                setDatastore([...datastore].sort((a, b) => (b.upvotes - a.upvotes)))
+                
+                break;
+
+            case 'Least Upvotes':
+                setDatastore([...datastore].sort((a, b) => (a.upvotes - b.upvotes)))
+                
+                break;
+
+            case 'Most Comments':
+                setDatastore([...datastore].sort((a, b) => (b.comments.length - a.comments.length)))
+                break;
+
+            case 'Least Comments':
+                setDatastore([...datastore].sort((a, b) => (a.comments.length - b.comments.length)))
+                break;
+        
+            default:
+                setDatastore([...datastore].sort((a, b) => (b.upvotes - a.upvotes)))
+                break;
+        }
+    }, [Sortby]);
 
     const statics = {
 
@@ -37,7 +64,8 @@ export default function AppTheme({children}:{children: React.ReactNode}){
         <AppContext.Provider
             value={{
                 datastore, setDatastore,
-                statics, currentUser
+                statics, currentUser,
+                setSortby, Sortby
 
             }}
 

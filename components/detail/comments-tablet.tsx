@@ -15,7 +15,7 @@ export default function CommentsTablet({id}:IProps){
 
 
 
-    const mainReply = (e) => {
+    const TabletReplyMain = (e) => {
         e.preventDefault();
 console.log(e.target)
     }
@@ -51,25 +51,23 @@ console.log(e.target)
                                                             <h4 className="font-bold leading-20 tracking-close text-14x text-xSlate-600">{obj.user.name}</h4>
                                                             <p className="text-14x font-normal text-xSlate-500">@{obj.user.username}</p>
                                                         </span>
-                                                        <p className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</p>                                
+                                                        <button type="button" aria-controls={`TabletReplyMain${i}`} data-collapse-toggle={`TabletReplyMain${i}`} className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</button>                                
                                                     </div>                            
                                 
                                                     <p className="ml-10 mb-6 mt-4 leading-22 text-15x text-xSlate-500 font-normal">{obj.content}</p>
                                 
                                                 {/* reply textbox */}
                                 
-                                                    <form  aria-labelledby="replyParent" onSubmit={(e) => mainReply(e)} className=" relative flex justify-between space-x-4">
+                                                    <form  id={`TabletReplyMain${i}`} className="hidden relative flex justify-between space-x-4">
                                                         <div className="flex-1 h-20 rounded-md mb-2 pl-14">
-                                                            <textarea ref={null} maxLength={205} minLength={10} rows={4} className="resize-none w-full h-full placeholder-slate-400  text-15x bg-xSiolet-50 rounded-xl px-6 py-4 outline-none focus:ring-xIndigo-600 focus:border focus:border-xIndigo-600 text-xSlate-600" placeholder="Type Your comment here"></textarea>
+                                                            <textarea  maxLength={205} minLength={10} rows={4} className="resize-none w-full h-full placeholder-slate-400  text-15x bg-xSiolet-50 rounded-xl px-6 py-4 outline-none focus:ring-xIndigo-600 focus:border focus:border-xIndigo-600 text-xSlate-600" placeholder="Type Your comment here"></textarea>
                                                         </div>
                                 
                                                         <div className="flex items-start">
-                                                            <button type='submit' className='flex px-6 py-3 bg-xFuchisia-600 hover:bg-fuchsia-500 rounded-lg'>
+                                                            <button type='button' className='flex px-6 py-3 bg-xFuchisia-600 hover:bg-fuchsia-500 rounded-lg'>
                                                                 <span className="leading-20 tracking-close font-bold text-14x text-xSiolet-50">Post Reply</span>
                                                             </button>
-                                                        </div>
-                                
-                                
+                                                        </div>                                                
                                                     </form>
                                 
                                                 {/* reply textbox */}

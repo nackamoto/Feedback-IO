@@ -28,7 +28,7 @@ export const CommentsMobile = ({id}:{id:string}) =>{
                                         <h4 className="font-bold leading-20 tracking-close text-13x text-xSlate-600">{obj.user.name}</h4>
                                         <p className="text-13x font-normal text-xSlate-500">@{obj.user.username}</p>
                                     </span>
-                                    <h6 className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</h6>                                
+                                    <button type="button" aria-controls={`MobileReplyMain${i}`} data-collapse-toggle={`MobileReplyMain${i}`} className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</button>                                
                 
                                 </div>
                 
@@ -37,7 +37,7 @@ export const CommentsMobile = ({id}:{id:string}) =>{
 
                                 {/* reply box */}
                 
-                                <form onSubmit={null} className="hidden flex justify-between space-x-4">
+                                <form id={`MobileReplyMain${i}`} onSubmit={null} className="hidden flex justify-between space-x-4">
                                         <div className="flex-1 h-20 rounded-md mb-2">
                                             <textarea  minLength={10} maxLength={205} rows={4} className="focus:ring-xIndigo-600 focus:border focus:border-xIndigo-600 resize-none w-full h-full placeholder-slate-400  text-13x bg-xSiolet-50 rounded-xl px-6 py-4 outline-none  text-xSlate-600" placeholder="Type Your reply here"></textarea>
                 

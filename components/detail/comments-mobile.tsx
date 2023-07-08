@@ -6,15 +6,47 @@ import Image from "next/image";
 
 export const CommentsMobile = ({id}:{id:string}) =>{
 
-    const {datastore, setDatastore} = useProps();
+    const {datastore, setDatastore, currentUser} = useProps();
 
+    const ReplyComment = (event) =>   {
+        
+        event.preventDefault();
+        const {target} = event;
+        
+        const message = target[0].value;
+        const index = parseInt(target.id.at(-1))
+
+        setDatastore(old => old.map((item) => {
+            return item.id.toString() === id ? {...item, comments: {...item.comments.map(obj => {
+                return obj.id === index ? {
+                    ...obj,
+    
+                    replies: [
+
+                         ...obj?.replies,                        
+                        {
+                            content: message,
+                            replyingTo: 'mr.nobody',
+                            user:{
+                                image: currentUser.image,
+                                name: currentUser.name,
+                                username: currentUser.username
+                            }
+                        }
+                    ]
+                } : obj
+            })}}: item
+        }))
+
+        
+    }
 
 
     return (
         <>
         {
             datastore.filter(value => value.id.toString() === id).map((obj, i) => {
-                const {comments, comments:{content}} = obj;
+                const {comments} = obj;
 
                 return (
                     <div key={i}>
@@ -28,18 +60,17 @@ export const CommentsMobile = ({id}:{id:string}) =>{
                                         <h4 className="font-bold leading-20 tracking-close text-13x text-xSlate-600">{obj.user.name}</h4>
                                         <p className="text-13x font-normal text-xSlate-500">@{obj.user.username}</p>
                                     </span>
-                                    <button type="button" aria-controls={`MobileReplyMain${i}`} data-collapse-toggle={`MobileReplyMain${i}`} className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</button>                                
+                                    <button type="button" aria-controls={`MobileReplyMain${obj.id}`} data-collapse-toggle={`MobileReplyMain${obj.id}`} className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</button>                                
                 
                                 </div>
                 
                                 <p className="leading-22 text-13x text-xSlate-500 font-normal pb-6">{obj.content}</p>
-{/* className={`${pErrors.description?.message ? "border ring-xRed-600 border-xRed-600": "focus:ring-xIndigo-600 focus:border focus:border-xIndigo-600"} resize-none w-full h-full placeholder-slate-400 text-15x bg-xSiolet-50 rounded-xl px-6 py-4 outline-none  text-xSlate-600`}></textarea> */}
 
                                 {/* reply box */}
                 
-                                <form id={`MobileReplyMain${i}`} onSubmit={null} className="hidden flex justify-between space-x-4">
+                                <form id={`MobileReplyMain${obj.id}`} onSubmit={ReplyComment} className="hidden flex justify-between space-x-4">
                                         <div className="flex-1 h-20 rounded-md mb-2">
-                                            <textarea  minLength={10} maxLength={205} rows={4} className="focus:ring-xIndigo-600 focus:border focus:border-xIndigo-600 resize-none w-full h-full placeholder-slate-400  text-13x bg-xSiolet-50 rounded-xl px-6 py-4 outline-none  text-xSlate-600" placeholder="Type Your reply here"></textarea>
+                                            <textarea  minLength={10} maxLength={205} rows={4} className=" focus:border focus:border-xIndigo-600 resize-none w-full h-full placeholder-slate-400  text-13x bg-xSiolet-50 rounded-xl px-6 py-4 outline-none  text-xSlate-600" placeholder="Type Your reply here"></textarea>
                 
                                         </div>
     
@@ -67,7 +98,7 @@ export const CommentsMobile = ({id}:{id:string}) =>{
                                                         <h4 className="font-bold leading-20 tracking-close text-13x text-xSlate-600">{reply.user.user}</h4>
                                                         <p className="text-13x font-normal text-xSlate-500">@{reply.user.username}</p>
                                                     </span>
-                                                    <h6 className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</h6>                                
+                                                    <h6 aria-controls={`MobileReplyChild${reply.id}`} data-collapse-toggle={`MobileReplyChild${reply.id}`} className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</h6>                                
                             
                                                 </div>
                             
@@ -77,13 +108,13 @@ export const CommentsMobile = ({id}:{id:string}) =>{
                                                 </p>
                                             </div>
 
-                                            <form onSubmit={null} className="hidden flex justify-between space-x-4">
+                                            <form id={`MobileReplyChild${reply.id}`} onSubmit={null} className="hidden flex justify-between space-x-4">
                                                 <div className="flex-1 h-20 rounded-md mb-2 pl-14">
-                                                    <textarea rows={4} minLength={10} maxLength={205} className="focus:ring-xIndigo-600 focus:border focus:border-xIndigo-600 resize-none w-full h-full placeholder-slate-400  text-13x bg-xSiolet-50 rounded-xl px-6 py-4 outline-none  text-xSlate-600" placeholder="Type Your reply here"></textarea>
+                                                    <textarea rows={4} minLength={10} maxLength={205} className=" focus:border focus:border-xIndigo-600 resize-none w-full h-full placeholder-slate-400  text-13x bg-xSiolet-50 rounded-xl px-6 py-4 outline-none  text-xSlate-600" placeholder="Type Your reply here"></textarea>
                                                 </div>
 
                                                 <div className="flex items-start">
-                                                    <button type='submit' onClick={null} className='flex px-6 py-3 bg-xFuchisia-600 hover:bg-fuchsia-500 rounded-lg'>
+                                                    <button type='submit'  className='flex px-6 py-3 bg-xFuchisia-600 hover:bg-fuchsia-500 rounded-lg'>
                                                         <span className="leading-20 tracking-close font-bold text-14x text-xSiolet-50">Post Reply</span>
                                                     </button>
                                                 </div>

@@ -12,15 +12,15 @@ import { Feedback404 } from "@/components/suggestions/no-feedback";
 export default function SuggestionPage(){
 
   const router = useRouter();
-  const sortRef = useRef(null);
-  
+  const ref = useRef(null);
+  const carretRef = useRef(null);
+
+  const [rotateCarret, setRotateCarret] = useState(false);
   const { datastore, setSortby, Sortby,  statics: {nLive, nProgress, nPlanned}, } = useProps();
+  const [isSidebarOpened, setisSidebarOpened] = useState(false);
   
-  
-
-  
+    
   const [filterBy, setFilterBy] = useState<string>('all');
-
 
 
   const [category, setCategory] = useState
@@ -67,8 +67,47 @@ export default function SuggestionPage(){
       
     }, [filterBy]);
 
+    useEffect(() => {
+      const sidebarHandler = (event) => {
+        if(
+          isSidebarOpened && 
+          ref.current && 
+          !ref.current.contains(event.target) 
+
+        ){
+            setisSidebarOpened(false);            
+        }
+      }
+
+      document.addEventListener("click", sidebarHandler);
+
+      return (() => {
+        document.removeEventListener("click", sidebarHandler);
+      })
+    }, [isSidebarOpened]);
 
 
+    useEffect(() => {
+      const selectHandler = (event) => {
+        if(
+          rotateCarret && 
+          carretRef.current && 
+          !carretRef.current.contains(event.target) 
+
+        ){
+            setRotateCarret(false);            
+        }
+      }
+
+      document.addEventListener("click", selectHandler);
+
+      return (() => {
+        document.removeEventListener("click", selectHandler);
+      })
+    }, [rotateCarret]);
+
+
+  const DecideRotate = (event) => !carretRef.current.contains(event.target) ? setRotateCarret(old => !old): null
 
   const DesktopSuggestion = () => {
 
@@ -122,7 +161,7 @@ export default function SuggestionPage(){
   return (
 
   <>
-    <main className="h-screen w-screen flex flex-col tablet:flex-col desktop:space-x-10 desktop:flex-row desktop:px-40 desktop:py-32 tablet:pt-14 tablet:pb-28 tablet:px-10">
+    <main className="h-screen w-screen 	flex flex-col tablet:flex-col desktop:space-x-10 desktop:flex-row desktop:px-40 desktop:py-32 tablet:pt-14 tablet:pb-28 tablet:px-10">
 
         <section className="flex tablet:mb-10 tablet:flex-row tablet:space-x-6 desktop:flex-col desktop:space-y-6 desktop:space-x-0"> {/* case 2 */}
 
@@ -131,12 +170,17 @@ export default function SuggestionPage(){
               <h2 className="font-bold text-15x tablet:text-20x leading-29 tracking-close tablet:tracking-closer">Frontend Mentor</h2>
               <span className="font-normal text-13x tablet:text-15x leading-22">Feedback Board</span>
             </div>
-            <button type='button' data-drawer-placement="right" data-drawer-target="sidebar" data-drawer-toggle="sidebar" aria-controls="sidebar" className="tablet:hidden inline-flex hover:ring-2 hover:outline-none hover:ring-gray-200">
-              <svg width="20" height="17" xmlns="http://www.w3.org/2000/svg"><g fill="#FFF" fillRule="evenodd"><path d="M0 0h20v3H0zM0 7h20v3H0zM0 14h20v3H0z"/></g></svg>
+            <button onClick={() => setisSidebarOpened(old => !old)} type='button' data-drawer-backdrop='true' data-drawer-placement='right' data-drawer-target='sidebar' data-drawer-toggle='sidebar' aria-controls='sidebar' className="tablet:hidden">
+              {
+                isSidebarOpened ? 
+                <svg width="18" height="17" xmlns="http://www.w3.org/2000/svg"><path d="M15.01.368l2.122 2.122-6.01 6.01 6.01 6.01-2.122 2.122L9 10.622l-6.01 6.01L.868 14.51 6.88 8.5.87 2.49 2.988.368 9 6.38 15.01.37z" fill="#FFF" fill-rule="evenodd"/></svg>
+                  :
+                <svg width="20" height="17" xmlns="http://www.w3.org/2000/svg"><g fill="#FFF" fillRule="evenodd"><path d="M0 0h20v3H0zM0 7h20v3H0zM0 14h20v3H0z"/></g></svg>
+              }
             </button>
           </div>
 
-          <aside id="sidebar" className="tablet:hidden fixed right-0 top-0 z-40 h-full pt-20 transition-transform translate-x-full sm:translate-x-0" aria-label="Sidebar">
+          <aside ref={ref} id="sidebar" className="tablet:hidden fixed right-0 top-0 z-40 h-full pt-20 transition-transform translate-x-full sm:translate-x-full" aria-labelledby="sidebar">
 
             <div className="h-full bg-xSiolet-50 px-6 py-6 space-y-6">
               <div className="pt-6 pl-6 pr-4 pb-9 bg-white rounded-lg">
@@ -283,22 +327,22 @@ export default function SuggestionPage(){
               <h3 className="font-bold text-18x leading-26 tracking-closer">{Suggestions.length}&nbsp;Suggestions</h3>
             </div>
             <div  className="flex-1 flex text-xSiolet-50 items-center">
-              <button  type='button' id="selectbox" data-dropdown-toggle="allowdropdown" className="font-normal text-13x text-xSiolet-50 tablet:text-14x cursor-pointer">Sort by&nbsp;:&nbsp;</button>
+              <button onClick={DecideRotate} type='button' id="selectbox" data-dropdown-toggle="allowdropdown" className="font-normal text-13x text-xSiolet-50 tablet:text-14x cursor-pointer">Sort by&nbsp;:&nbsp;</button>
               <div  className="flex items-center">
                 <h4 className="font-bold text-13x text-xSiolet-50 tablet:text-14x mr-2 leading-20 tracking-close">{Sortby}</h4>
-                <span ref={sortRef}>
-                  <svg data-accordion-icon className="h-2 w-2" viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="white" strokeWidth="2"/></svg>
+                <span>
+                  <svg  className={`h-2 w-2 ${ rotateCarret && 'rotate-180'}`} viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="white" strokeWidth="2"/></svg>
                 </span>
               </div>
 
             </div>
 
-              <ul id='allowdropdown' aria-labelledby="selectbox" className="hidden  text-16x font-normal rounded-lg bg-white text-xSlate-500  shadow-xl divide-y">
+              <ul  ref={carretRef} id='allowdropdown' aria-labelledby="selectbox" className="hidden  text-16x font-normal rounded-lg bg-white text-xSlate-500  shadow-xl divide-y">
 
                 <li className='flex items-center hover:text-xFuchisia-600 cursor-pointer justify-between px-6 py-3 ' onClick={() => setSortby('Most Upvotes')}>
                   <span className="mr-24">Most Upvotes</span>
                   <span>
-                    {Sortby === 'Most Upvotes' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
+                    {Sortby === 'Most Upvotes' && <svg xmlns="http://www.w3.org/2000/svg"  width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
                   </span>
                 </li>
                 <li className='flex items-center hover:text-xFuchisia-600 cursor-pointer justify-between px-6 py-3 ' onClick={() => setSortby('Least Upvotes')}>

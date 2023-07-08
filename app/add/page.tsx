@@ -84,7 +84,7 @@ export default function NewFeedback(){
                         <h1 className="leading-20 tracking-close font-bold text-13x tablet:text-14x text-xSlate-600">Category</h1>
                         <label className="text-13x tablet:text-14x font-normal text-xSlate-500">Choose a category for your feedback</label>
                         
-}
+
                         <button type='button' id='categoryToggle' value={Category}  data-dropdown-toggle='dropdown' className="w-full mt-4 px-6 py-3 flex bg-xSiolet-50 items-center justify-between rounded-md">
                             <span className="font-normal text-15x text-xSlate-600 ">{SelectedCategory}</span>
                             <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 6l4-4 4 4" stroke="#4661E6" strokeWidth="2" fill="none" fillRule="evenodd"/></svg>

@@ -43,7 +43,7 @@ export default function EditFeedback(){
 
     }
 
-    const RemoveReq =  () => {
+    const Delete =  () => {
         
             const updateStore = datastore.filter(ev => ev.id.toString() !== id)
             router.push("/suggestions")
@@ -51,12 +51,12 @@ export default function EditFeedback(){
             console.log(`deleted feedback with id ${id}`)   
     }
 
-    const useCategory = (selected:string, category:string) => {
+    const assignCategory = (selected:string, category:string) => {
         setSelectedCategory(selected)
         setCategory(category)
     }
     
-    const useStatus = (selected:string, status:string) => {
+    const assignStatus = (selected:string, status:string) => {
         setSelectedStatus(selected)
         setStatus(status)
     }
@@ -102,32 +102,32 @@ export default function EditFeedback(){
                         </button>
 
                         <ul id='categoryDrop' aria-labelledby="editCatToggle" className="z-10 hidden text-16x bg-white shadow-xl text-xSlate-500 rounded-lg divide-y">
-                                <li onClick={() => useCategory('Feature','feature')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                <li onClick={() => assignCategory('Feature','feature')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                     <span className="">Feature</span>
                                     <span className="pl-60">
                                         {Category === 'feature' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                     </span>
                                 </li>
 
-                                <li onClick={() => useCategory('UI','ui')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                <li onClick={() => assignCategory('UI','ui')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                     <span className="">UI</span>
                                     <span className="pl-60">
                                         {Category === 'ui' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                     </span>
                                 </li>
-                                <li onClick={() => useCategory('UX','ux')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                <li onClick={() => assignCategory('UX','ux')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                     <span className="">UX</span>
                                     <span className="pl-60">
                                         {Category === 'ux' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                     </span>
                                 </li>
-                                <li onClick={() => useCategory('Enhancement','enhancement')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                <li onClick={() => assignCategory('Enhancement','enhancement')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                     <span className="">Enhancement</span>
                                     <span className="pl-60">
                                         {Category === 'enhancement' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                     </span>
                                 </li>
-                                <li onClick={() => useCategory('Bug','bug')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                                <li onClick={() => assignCategory('Bug','bug')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                     <span className="">Bug</span>
                                     <span className="pl-60">
                                         {Category === 'bug' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
@@ -150,25 +150,25 @@ export default function EditFeedback(){
                         </button>
 
                         <ul id='statusDrop' aria-labelledby="editStatToggle" className="z-10 hidden text-16x bg-white shadow-xl text-xSlate-500 rounded-lg divide-y">
-                            <li onClick={() => useStatus('Suggestion','suggestion')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                            <li onClick={() => assignStatus('Suggestion','suggestion')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                 <span className="">Suggestion</span>
                                 <span className="pl-60">
                                     {Status === 'suggestion' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                 </span>
                             </li>
-                            <li onClick={() => useStatus('Planned','planned')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                            <li onClick={() => assignStatus('Planned','planned')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                 <span className="">Planned</span>
                                 <span className="pl-60">
                                     {Status === 'planned' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                 </span>
                             </li>
-                            <li onClick={() => useStatus('In-Progress','in-progress')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                            <li onClick={() => assignStatus('In-Progress','in-progress')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                 <span className="">In-Progress</span>
                                 <span className="pl-60">
                                     {Status === 'in-progress' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                 </span>
                             </li>
-                            <li onClick={()  => useStatus('Live','live')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                            <li onClick={()  => assignStatus('Live','live')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                 <span className="">Live</span>
                                 <span className="pl-60">
                                     {Status === 'live' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
@@ -201,7 +201,7 @@ export default function EditFeedback(){
                             </button>
                         </div>
 
-                        <button onClick={() => RemoveReq()} type="button" className='flex bg-red-600 hover:bg-rose-400 rounded-lg mt-4 justify-center tablet:justify-normal'>
+                        <button onClick={() => Delete()} type="button" className='flex bg-red-600 hover:bg-rose-400 rounded-lg mt-4 justify-center tablet:justify-normal'>
                             <span className="px-6 py-3 leading-20 tracking-close font-bold text-13x tablet:text-14x text-xSiolet-50">Delete</span>
                         </button>
                     </div>

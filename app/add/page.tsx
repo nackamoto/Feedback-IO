@@ -44,7 +44,7 @@ export default function NewFeedback(){
         
     }
 
-    const useCategory = (selected, category) => {
+    const assignCategory = (selected, category) => {
         setSelectedCategory(selected)
         setCategory(category)
     }
@@ -90,32 +90,32 @@ export default function NewFeedback(){
                             <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path d="M1 6l4-4 4 4" stroke="#4661E6" strokeWidth="2" fill="none" fillRule="evenodd"/></svg>
                         </button>
                         <ul id='dropdown' aria-labelledby="categoryToggle" className="z-10 hidden text-16x bg-white shadow-xl text-xSlate-500 rounded-lg divide-y-2">
-                            <li onClick={() => useCategory('Feature','feature')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                            <li onClick={() => assignCategory('Feature','feature')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                 <span>Feature</span>
                                 <span className="pl-60">
                                     {Category === 'feature' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                 </span>
                             </li>
 
-                            <li onClick={() => useCategory('UI','ui')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                            <li onClick={() => assignCategory('UI','ui')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                 <span>UI</span>
                                 <span className="pl-60">
                                     {Category === 'ui' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                 </span>
                             </li>
-                            <li onClick={() => useCategory('UX','ux')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                            <li onClick={() => assignCategory('UX','ux')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                 <span>UX</span>
                                 <span className="pl-60">
                                     {Category === 'ux' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                 </span>
                             </li>
-                            <li onClick={() => useCategory('Enhancement','enhancement')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                            <li onClick={() => assignCategory('Enhancement','enhancement')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                 <span>Enhancement</span>
                                 <span className="pl-60">
                                     {Category === 'enhancement' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  
                                 </span>
                             </li>
-                            <li onClick={() => useCategory('Bug','bug')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
+                            <li onClick={() => assignCategory('Bug','bug')} className="flex px-6 py-3 items-center hover:text-xFuchisia-600 cursor-pointer justify-between">
                                 <span>Bug</span>
                                 <span className="pl-60">
                                     {Category === 'bug' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg> }                                  

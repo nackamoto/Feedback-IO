@@ -1,6 +1,7 @@
 import AppTheme from '@/context/app-theme'
 import './globals.css'
 import { Jost } from 'next/font/google'
+import Script from 'next/script'
 
 const jfont = Jost({ subsets: ['latin'] })
 
@@ -17,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={jfont.className}>
+        <Script src='/static/flowbite.min.js' strategy='beforeInteractive'/>
         <AppTheme>
           {children}
         </AppTheme>

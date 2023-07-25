@@ -1,5 +1,5 @@
 import { useProps } from "@/context/app-theme";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 export interface RoadmapProps {
     [x: string]: any;

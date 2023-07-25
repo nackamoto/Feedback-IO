@@ -1,45 +1,72 @@
-'use client';
-
-
 import { useProps } from "@/context/app-theme";
 import Image from "next/image";
+import { useState, useRef } from "react";
 
 export const CommentsMobile = ({id}:{id:string}) =>{
 
     const {datastore, setDatastore, currentUser} = useProps();
 
-    const ReplyComment = (event) =>   {
-        
-        event.preventDefault();
-        const {target} = event;
-        
-        const message = target[0].value;
-        const index = parseInt(target.id.at(-1))
+    const productRefsMobile = datastore.map(() => useRef(null))
+    const [isVisibleM, setIsVisibleM] = useState(datastore.map(() => false));
 
-        setDatastore(old => old.map((item) => {
-            return item.id.toString() === id ? {...item, comments: {...item.comments.map(obj => {
-                return obj.id === index ? {
-                    ...obj,
-    
-                    replies: [
-
-                         ...obj?.replies,                        
-                        {
-                            content: message,
-                            replyingTo: 'mr.nobody',
-                            user:{
-                                image: currentUser.image,
-                                name: currentUser.name,
-                                username: currentUser.username
-                            }
-                        }
-                    ]
-                } : obj
-            })}}: item
-        }))
-
-        
+    const toggleVisibilityMobile = (index) => {
+        setIsVisibleM((prev) => {
+            const newVisibility = [...prev];
+            newVisibility[index] = !prev[index];
+            return newVisibility;
+          });
     }
+
+
+
+    const addReplytoCommentMobile = (event) => {
+        event.preventDefault();
+
+        const commentId = event.target.id;
+        const productId = id;
+        const message = event.target[0].value;
+
+
+
+        const updatedProductRequests = datastore.map((productRequest) => {
+            if (productRequest.id.toString() === productId) {
+              const updatedComments = productRequest.comments.map((comment) => {
+                if (comment.id.toString() === commentId) {
+
+                  const newReply = {
+                    content: message,
+                    replyingTo: comment.user.username, 
+                    user: {
+                      image: currentUser.image,
+                      name: currentUser.name,
+                      username: currentUser.username,
+                    }
+
+                  };
+                  const updatedReplies = comment.replies ? [...comment.replies, newReply] : [newReply];
+                  // Check if the comment already has replies, if yes, add the new reply, otherwise create the replies array.
+        
+                  return {
+                    ...comment,
+                    replies: updatedReplies,
+                  };
+                }
+                return comment;
+              });
+              return {
+                ...productRequest,
+                comments: updatedComments,
+              };
+            }
+            return productRequest;
+          });
+        
+          setDatastore(updatedProductRequests);
+          
+          
+          
+        }
+
 
 
     return (
@@ -60,7 +87,7 @@ export const CommentsMobile = ({id}:{id:string}) =>{
                                         <h4 className="font-bold leading-20 tracking-close text-13x text-xSlate-600">{obj.user.name}</h4>
                                         <p className="text-13x font-normal text-xSlate-500">@{obj.user.username}</p>
                                     </span>
-                                    <button type="button" aria-controls={`MobileReplyMain${obj.id}`} data-collapse-toggle={`MobileReplyMain${obj.id}`} className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</button>                                
+                                    <button onClick={() => toggleVisibilityMobile(i)} type="button" className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</button>                                
                 
                                 </div>
                 
@@ -68,7 +95,7 @@ export const CommentsMobile = ({id}:{id:string}) =>{
 
                                 {/* reply box */}
                 
-                                <form id={`MobileReplyMain${obj.id}`} onSubmit={ReplyComment} className="hidden flex justify-between space-x-4">
+                                <form ref={productRefsMobile[i]} id={`${obj.id}`} onSubmit={function(event) {addReplytoCommentMobile(event); toggleVisibilityMobile(i)}} className={`${isVisibleM[i] ? "": "hidden"} flex justify-between space-x-4`}>
                                         <div className="flex-1 h-20 rounded-md mb-2">
                                             <textarea  minLength={10} maxLength={205} rows={4} className=" focus:border focus:border-xIndigo-600 resize-none w-full h-full placeholder-slate-400  text-13x bg-xSiolet-50 rounded-xl px-6 py-4 outline-none  text-xSlate-600" placeholder="Type Your reply here"></textarea>
                 
@@ -98,7 +125,7 @@ export const CommentsMobile = ({id}:{id:string}) =>{
                                                         <h4 className="font-bold leading-20 tracking-close text-13x text-xSlate-600">{reply.user.user}</h4>
                                                         <p className="text-13x font-normal text-xSlate-500">@{reply.user.username}</p>
                                                     </span>
-                                                    <h6 aria-controls={`MobileReplyChild${reply.id}`} data-collapse-toggle={`MobileReplyChild${reply.id}`} className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">Reply</h6>                                
+                                                    <h6 className="font-semibold text-13x leading-19 cursor-pointer text-xIndigo-600 hover:underline hover:decoration-xIndigo-600">  </h6>                                
                             
                                                 </div>
                             
@@ -108,7 +135,7 @@ export const CommentsMobile = ({id}:{id:string}) =>{
                                                 </p>
                                             </div>
 
-                                            <form id={`MobileReplyChild${reply.id}`} onSubmit={null} className="hidden flex justify-between space-x-4">
+                                            {/* <form className="hidden flex justify-between space-x-4">
                                                 <div className="flex-1 h-20 rounded-md mb-2 pl-14">
                                                     <textarea rows={4} minLength={10} maxLength={205} className=" focus:border focus:border-xIndigo-600 resize-none w-full h-full placeholder-slate-400  text-13x bg-xSiolet-50 rounded-xl px-6 py-4 outline-none  text-xSlate-600" placeholder="Type Your reply here"></textarea>
                                                 </div>
@@ -118,7 +145,7 @@ export const CommentsMobile = ({id}:{id:string}) =>{
                                                         <span className="leading-20 tracking-close font-bold text-14x text-xSiolet-50">Post Reply</span>
                                                     </button>
                                                 </div>
-                                            </form> 
+                                            </form>  */}
 
                                         </div>
 

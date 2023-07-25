@@ -57,7 +57,7 @@ export const Detail = ({id}:{id:string}) => {
 
                             <header className="px-6 py-6 bg-white rounded-lg flex flex-col tablet:hidden">
                                 <h3 className='leading-26 mb-2 tracking-closer text-xSlate-600 text-13x font-bold'>{title}</h3>
-                                <p className="mt-1 mb-2.5 text-13x font-normal text-xSlate-500 leading-23 truncate">{description}</p>
+                                <p className="mt-1 mb-2.5 text-13x font-normal text-xSlate-500 leading-23 break-words">{description}</p>
                                 <div className="flex items-start mb-3.5">
                                     <span className="bg-xSiolet-50 rounded-xl text-xIndigo-600 text-13x font-semibold">
                                         <h6 className="px-4 py-2">{category}</h6>

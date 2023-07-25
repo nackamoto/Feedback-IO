@@ -1,12 +1,12 @@
 import { useProps } from "@/context/app-theme";
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useState, createRef } from "react";
 
 export const CommentsMobile = ({id}:{id:string}) =>{
 
     const {datastore, setDatastore, currentUser} = useProps();
 
-    const productRefsMobile = datastore.map(() => useRef(null))
+    const productRefsMobile = datastore.map(() => createRef())
     const [isVisibleM, setIsVisibleM] = useState(datastore.map(() => false));
 
     const toggleVisibilityMobile = (index) => {

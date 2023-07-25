@@ -1,6 +1,6 @@
 import { useProps } from "@/context/app-theme";
 import Image from "next/image";
-import {useState, useEffect, useRef } from "react";
+import {useState, useEffect, createRef } from "react";
 
 
 interface IProps {
@@ -12,7 +12,7 @@ export default function CommentsTablet({id}:IProps){
 
     const {datastore, setDatastore, currentUser} = useProps();
 
-    const productRefsTablet = datastore.map(() => useRef(null))
+    const productRefsTablet = datastore.map(() => createRef())
     const [isVisibleT, setIsVisibleT] = useState(datastore.map(() => false));
 
     const toggleVisibilityTablet = (index) => {

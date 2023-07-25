@@ -26,11 +26,11 @@ export default  function FeedbackDetail(){
     })
 
     const [metadata] = datastore.filter(ev => ev.id.toString() === id)
-    const {comments} = metadata
+    // const {comments} = metadata
 
 
     const nChar = watch('description').length;
-    const nComments = comments.length
+    // const nComments = comments.length
     
 
 
@@ -85,16 +85,16 @@ export default  function FeedbackDetail(){
 
 {/* comment section starts here */}
 
-                <section className={`flex-none flex flex-col rounded-xl bg-white py-8 px-6 ${nComments < 1 ? "h-3/6" : "h-full"}`}>
+                <section className={`flex-none flex flex-col rounded-xl bg-white py-8 px-6 ${0 < 1 ? "h-3/6" : "h-full"}`}>
 
-                    <p className="relative mt-6 leading-26 tracking-closer text-18x font-bold text-xSlate-600 pb-4">{nComments}&nbsp;{nComments < 2 ? "Comment": "Comments"}</p>
+                    <p className="relative mt-6 leading-26 tracking-closer text-18x font-bold text-xSlate-600 pb-4">{0}&nbsp;{0 < 2 ? "Comment": "Comments"}</p>
 
                     <div className="hidden tablet:flex flex-col overflow-y-auto divide-y divide-slate-100 h-full">
-                        { nComments > 0 ?  <CommentsTablet id={id}/>: <div className="text-16x font-semibold text-xSlate-500">Tell us what you think </div>}
+                        { 1 > 0 ?  <CommentsTablet id={id}/>: <div className="text-16x font-semibold text-xSlate-500">Tell us what you think </div>}
                     </div>
 
                     <div className="flex flex-col overflow-y-auto divide-y divide-slate-100 tablet:hidden">
-                    { nComments > 0 ?  <CommentsMobile id={id}/>: <div className="text-16x font-semibold text-xSlate-500">Tell us what you think </div>}
+                    { 1 > 0 ?  <CommentsMobile id={id}/>: <div className="text-16x font-semibold text-xSlate-500">Tell us what you think </div>}
                     </div>
 
 

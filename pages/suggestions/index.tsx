@@ -1,23 +1,37 @@
-'use client'
 import { SuggestionsTablet } from "@/components/suggestions/suggestions-tablet";
 import { SuggestionsMobile } from "@/components/suggestions/suggestions-mobile";
 import { useProps } from "@/context/app-theme";
 import { sugProps } from "@/components/suggestions/suggestions-tablet";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState, useRef, Fragment } from "react";
 import { Feedback404 } from "@/components/suggestions/no-feedback";
+import { useOnClickOutside } from "usehooks-ts";
+import { Menu } from "@headlessui/react";
+import SidebarTest from "@/components/miscellaneous/mobilesidebar";
+
+
+
 
 
 export default function SuggestionPage(){
 
   const router = useRouter();
-  const ref = useRef(null);
-  const carretRef = useRef(null);
+
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
+
+  useOnClickOutside(dropdownRef, (e) => {
+    setRotateCarret(false);
+  });
+
+
+  const { datastore, setSortby, Sortby,  statics: {nLive, nProgress, nPlanned}, } = useProps();
 
   const [rotateCarret, setRotateCarret] = useState(false);
-  const { datastore, setSortby, Sortby,  statics: {nLive, nProgress, nPlanned}, } = useProps();
   const [isSidebarOpened, setisSidebarOpened] = useState(false);
+  const [SidebarOpen, setSidebarOpen] = useState(false);
   
     
   const [filterBy, setFilterBy] = useState<string>('all');
@@ -87,27 +101,7 @@ export default function SuggestionPage(){
     }, [isSidebarOpened]);
 
 
-    useEffect(() => {
-      const selectHandler = (event) => {
-        if(
-          rotateCarret && 
-          carretRef.current && 
-          !carretRef.current.contains(event.target) 
 
-        ){
-            setRotateCarret(false);            
-        }
-      }
-
-      document.addEventListener("click", selectHandler);
-
-      return (() => {
-        document.removeEventListener("click", selectHandler);
-      })
-    }, [rotateCarret]);
-
-
-  const DecideRotate = (event) => !carretRef.current.contains(event.target) ? setRotateCarret(old => !old): null
 
   const DesktopSuggestion = () => {
 
@@ -160,89 +154,41 @@ export default function SuggestionPage(){
 
   return (
 
-  <>
-    <main className="h-screen w-screen 	flex flex-col tablet:flex-col desktop:space-x-10 desktop:flex-row desktop:px-40 desktop:py-32 tablet:pt-14 tablet:pb-28 tablet:px-10">
+    <>
+    
+    <main className="overflow-y-auto h-screen w-screen bg-zinc-100 flex flex-col tablet:flex-col desktop:space-x-10 desktop:flex-row desktop:px-40 desktop:py-32 tablet:pt-14  tablet:px-10">
 
         <section className="flex tablet:mb-10 tablet:flex-row tablet:space-x-6 desktop:flex-col desktop:space-y-6 desktop:space-x-0"> {/* case 2 */}
 
-          <div className="z-50 top-0 w-full desktop:flex-none rounded-none flex-1 flex items-center justify-between tablet:flex-col px-6 py-4 tablet:pt-24  tablet:pl-6 tablet:pr-11 tablet:pb-6 desktop:pt-16 desktop:pr-20  bg-image-mobile desktop:bg-image-desktop tablet:bg-image-tablet bg-norepeat tablet:rounded-lg"> 
+          <div className="z-50 top-0 left-0 right-0 w-full desktop:flex-none rounded-none flex-1 flex items-center justify-between tablet:flex-col px-6 py-4 tablet:pt-24  tablet:pl-6 tablet:pr-11 tablet:pb-6 desktop:pt-16 desktop:pr-20  bg-image-mobile desktop:bg-image-desktop tablet:bg-image-tablet bg-norepeat tablet:rounded-lg"> 
             <div className="flex-nowrap text-white">
               <h2 className="font-bold text-15x tablet:text-20x leading-29 tracking-close tablet:tracking-closer">Frontend Mentor</h2>
-              <span className="font-normal text-13x tablet:text-15x leading-22">Feedback Board</span>
+              <span onClick={() => router.back()} className="font-normal text-13x tablet:text-15x leading-22">Feedback Board</span>
             </div>
-            <button onClick={() => setisSidebarOpened(old => !old)} type='button' data-drawer-backdrop='true' data-drawer-placement='right' data-drawer-target='sidebar' data-drawer-toggle='sidebar' aria-controls='sidebar' className="tablet:hidden">
+            <button onClick={function(event){console.log("clicked") ; setSidebarOpen(old => !old)}} type='button' className="tablet:hidden">
               {
-                isSidebarOpened ? 
-                <svg width="18" height="17" xmlns="http://www.w3.org/2000/svg"><path d="M15.01.368l2.122 2.122-6.01 6.01 6.01 6.01-2.122 2.122L9 10.622l-6.01 6.01L.868 14.51 6.88 8.5.87 2.49 2.988.368 9 6.38 15.01.37z" fill="#FFF" fill-rule="evenodd"/></svg>
+                SidebarOpen ? 
+                <svg width="18" height="17" xmlns="http://www.w3.org/2000/svg"><path d="M15.01.368l2.122 2.122-6.01 6.01 6.01 6.01-2.122 2.122L9 10.622l-6.01 6.01L.868 14.51 6.88 8.5.87 2.49 2.988.368 9 6.38 15.01.37z" fill="#FFF" fillRule="evenodd"/></svg>
                   :
-                <svg width="20" height="17" xmlns="http://www.w3.org/2000/svg"><g fill="#FFF" fillRule="evenodd"><path d="M0 0h20v3H0zM0 7h20v3H0zM0 14h20v3H0z"/></g></svg>
-              }
+                  <svg width="20" height="17" xmlns="http://www.w3.org/2000/svg"><g fill="#FFF" fillRule="evenodd"><path d="M0 0h20v3H0zM0 7h20v3H0zM0 14h20v3H0z"/></g></svg>
+                }
             </button>
+
+
           </div>
 
-          <aside ref={ref} id="sidebar" className="tablet:hidden fixed right-0 top-0 z-40 h-full pt-20 transition-transform translate-x-full sm:translate-x-full" aria-labelledby="sidebar">
+          <div className="hidden">
 
-            <div className="h-full bg-xSiolet-50 px-6 py-6 space-y-6">
-              <div className="pt-6 pl-6 pr-4 pb-9 bg-white rounded-lg">
-                <div className="flex flex-col space-y-3.5">
-                  <div className="flex space-x-2  text-13x font-semibold">
-                      <span onClick={() => setFilterBy("all")} className={`${category.all ? "bg-xIndigo-600 text-white": "bg-xSiolet-50 text-xIndigo-600"} hover:cursor-pointer rounded-xl`}>
-                        <h6 className="px-4 py-2">All</h6>
-                      </span>
-                      <span onClick={() => setFilterBy("ui")} className={`${category.ui ? "bg-xIndigo-600 text-white": "bg-xSiolet-50 text-xIndigo-600"} hover:cursor-pointer rounded-xl`}>
-                        <h6 className="px-4 py-2">UI</h6>
-                      </span>
-                      <span onClick={() => setFilterBy("ux")} className={`${category.ux ? "bg-xIndigo-600 text-white": "bg-xSiolet-50 text-xIndigo-600"} hover:cursor-pointer rounded-xl`}>
-                        <h6 className="px-4 py-2">UX</h6>
-                      </span>
-                    </div>
-                    <div className="flex space-x-2 text-xIndigo-600 text-13x font-semibold"> 
-                      <span onClick={() => setFilterBy("enhancement")} className={`${category.enhancement ? "bg-xIndigo-600 text-white": "bg-xSiolet-50 text-xIndigo-600"} hover:cursor-pointer rounded-xl`}>
-                        <h6 className="px-4 py-2">Enhancement</h6>
-                      </span>
-                      <span onClick={() => setFilterBy("bug")} className={`${category.bug ? "bg-xIndigo-600 text-white": "bg-xSiolet-50 text-xIndigo-600"} hover:cursor-pointer rounded-xl`}>
-                        <h6 className="px-4 py-2">Bug</h6>
-                      </span>
-                  </div>
-                  <div className="flex space-x-2 text-xIndigo-600 text-13x font-semibold"> 
-                      <span onClick={() => setFilterBy("feature")} className={`${category.feature ? "bg-xIndigo-600 text-white": "bg-xSiolet-50 text-xIndigo-600"} hover:cursor-pointer rounded-xl`}>
-                        <h6 className="px-4 py-2">Feature</h6>
-                      </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col px-6 pb-6 pt-6  bg-white rounded-lg">
-                <div className="flex pb-6 justify-between items-center">
-                  <h3 className="text-18x text-xSlate-600 font-bold leading-26 tracking-closer">Roadmap</h3>
-                  <Link href={`/roadmap`} passHref>
-                    <span className="font-semibold text-13x leading-19 text-xIndigo-600 hover:cursor-pointer  hover:text-indigo-400 hover:opacity-75 underline">View</span>
-                  </Link>
-                </div>
-
-                <div className="flex flex-col space-y-2 rounded-lg">
-                  <div className="flex items-center text-16x leading-23 text-xSlate-500">
-                    <div className="h-2 w-2 rounded-full bg-xOrange-300 mr-4"></div>
-                    <span className="font-normal   flex-1 ">Planned</span>
-                    <span className=" font-bold">{nPlanned}</span>
-                  </div>
-                  <div className="flex items-center text-16x leading-23 text-xSlate-500">
-                    <div className="h-2 w-2 rounded-full bg-xFuchisia-600 mr-4"></div>
-                    <span className="font-normal   flex-1 ">In-Progress</span>
-                    <span className=" font-bold">{nProgress}</span>
-                  </div>
-                  <div className="flex items-center text-16x leading-23 text-xSlate-500">
-                    <div className="h-2 w-2 rounded-full bg-xBlue-400 mr-4"></div>
-                    <span className="font-normal   flex-1 ">Live</span>
-                    <span className=" font-bold">{nLive}</span>
-                  </div>
-
-                </div>
-              </div>
-
-
-            </div>
-          </aside>
+            <SidebarTest
+              isOpen={SidebarOpen}
+              setIsOpen={setSidebarOpen}
+              setFilterBy={setFilterBy}
+              category={category}
+              nLive={nLive}
+              nPlanned={nPlanned}
+              nProgress={nProgress}
+          />
+          </div>
 
 
             <div className="mobile:hidden desktop:flex-none tablet:flex-1 tablet:flex pt-6 pl-6 pr-4 pb-9 desktop:py-6 desktop:pt-6 desktop:pr-12 bg-white rounded-lg">
@@ -315,7 +261,7 @@ export default function SuggestionPage(){
 
 
 
-      <div className="flex tablet:flex-1 desktop:flex-row overflow-hidden"> 
+      <div className="flex tablet:flex-1 desktop:flex-row overflow-hidden tablet:overflow-visible"> 
 
         <section className="flex-1 flex flex-col space-y-6 w-full">
 
@@ -326,61 +272,96 @@ export default function SuggestionPage(){
               </span>
               <h3 className="font-bold text-18x leading-26 tracking-closer">{Suggestions.length}&nbsp;Suggestions</h3>
             </div>
-            <div  className="flex-1 flex text-xSiolet-50 items-center">
-              <button onClick={DecideRotate} type='button' id="selectbox" data-dropdown-toggle="allowdropdown" className="font-normal text-13x text-xSiolet-50 tablet:text-14x cursor-pointer">Sort by&nbsp;:&nbsp;</button>
-              <div  className="flex items-center">
-                <h4 className="font-bold text-13x text-xSiolet-50 tablet:text-14x mr-2 leading-20 tracking-close">{Sortby}</h4>
-                <span>
-                  <svg  className={`h-2 w-2 ${ rotateCarret && 'rotate-180'}`} viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="white" strokeWidth="2"/></svg>
-                </span>
+
+
+            <Menu as="div"  className='flex-1 relative'>
+              <div ref={dropdownRef} className="" onClick={() => setRotateCarret(prev => !prev)}>
+                <Menu.Button className='flex items-center space-x-2 text-white hover:text-slate-50 hover:opacity-50'>
+                  <p  className="font-normal text-13x  tablet:text-14x cursor-pointer">Sort by :</p>
+                  <span className="font-bold text-13x tablet:text-14x mr-2 leading-20 tracking-close">{Sortby}</span>
+                  <span>
+                    <svg  className={`h-2 w-2 stroke-white ${ rotateCarret && 'rotate-180'}`} viewBox="0 0 9 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="white" strokeWidth="2"/></svg>
+                </span>                                  
+                </Menu.Button>
+
+                <Menu.Items className="absolute w-64 z-50 mt-6 tablet:mt-8 origin-top-right divide-y-2 divide-gray-100 bg-white shadow-2xl focus:outline-none text-16x font-normal rounded-md">
+                    <Menu.Item as="div" className='px-6 py-3 hover:text-xFuchisia-600 cursor-pointer w-full'>
+                        {({ active }) => (
+                          <button onClick={() => setSortby('Most Upvotes')}
+                            className={`${
+                              active ? 'text-xFuchisia-600 cursor-pointer' : 'text-xSlate-500'
+                            } group flex w-full items-center justify-between`}
+                          >
+                              <p>Most Upvotes</p>
+                              <span>
+                                {Sortby === 'Most Upvotes' && <svg xmlns="http://www.w3.org/2000/svg"  width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
+                              </span>
+
+                          </button>
+                        )}
+                    </Menu.Item>
+                    <Menu.Item as="div" className='px-6 py-3'>
+                        {({ active }) => (
+                          <button onClick={() => setSortby('Least Upvotes')}
+                            className={`${
+                              active ? 'text-xFuchisia-600 cursor-pointer' : 'text-xSlate-500'
+                            } group flex w-full items-center justify-between`}
+                          >
+                              <p>Least Upvotes</p>
+                              <span>
+                                {Sortby === 'Least Upvotes' && <svg xmlns="http://www.w3.org/2000/svg"  width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
+                              </span>
+
+                          </button>
+                        )}
+                    </Menu.Item>
+                    <Menu.Item as="div" className='px-6 py-3'>
+                        {({ active }) => (
+                          <button onClick={() => setSortby('Most Comments')} 
+                            className={`${
+                              active ? 'text-xFuchisia-600 cursor-pointer' : 'text-xSlate-500'
+                            } group flex w-full items-center justify-between`}
+                          >
+                              <p>Most Comments</p>
+                              <span>
+                                {Sortby === 'Most Comments' && <svg xmlns="http://www.w3.org/2000/svg"  width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
+                              </span>
+                                        
+                          </button>
+                        )}
+                    </Menu.Item>
+                    <Menu.Item as="div" className='px-6 py-3'>
+                        {({ active }) => (
+                          <button onClick={() => setSortby('Least Comments')}
+                            className={`${
+                              active ? 'text-xFuchisia-600 cursor-pointer' : 'text-xSlate-500'
+                            } group flex w-full items-center justify-between`}
+                          >
+                              <p>Least Comments</p>
+                              <span>
+                                {Sortby === 'Least Comments' && <svg xmlns="http://www.w3.org/2000/svg"  width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
+                              </span>
+
+                          </button>
+                        )}
+                    </Menu.Item>
+                </Menu.Items>
               </div>
+            </Menu>
 
-            </div>
 
-              <ul  ref={carretRef} id='allowdropdown' aria-labelledby="selectbox" className="hidden  text-16x font-normal rounded-lg bg-white text-xSlate-500  shadow-xl divide-y">
-
-                <li className='flex items-center hover:text-xFuchisia-600 cursor-pointer justify-between px-6 py-3 ' onClick={() => setSortby('Most Upvotes')}>
-                  <span className="mr-24">Most Upvotes</span>
-                  <span>
-                    {Sortby === 'Most Upvotes' && <svg xmlns="http://www.w3.org/2000/svg"  width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
-                  </span>
-                </li>
-                <li className='flex items-center hover:text-xFuchisia-600 cursor-pointer justify-between px-6 py-3 ' onClick={() => setSortby('Least Upvotes')}>
-                  <span className="mr-24">Least Upvotes</span>
-                  <span>
-                    {Sortby === 'Least Upvotes' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
-                  </span>
-
-                </li>
-                <li className='flex items-center hover:text-xFuchisia-600 cursor-pointer justify-between px-6 py-3 ' onClick={() => setSortby('Most Comments')}>
-                  <span className="mr-24">Most Comments</span>
-                  <span>
-                    {Sortby === 'Most Comments' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
-                  </span>
-
-                </li>
-                <li className='flex items-center hover:text-xFuchisia-600 cursor-pointer justify-between px-6 py-3 ' onClick={() => setSortby('Least Comments')}>
-                  <span className="mr-24">Least Comments</span>
-                  <span>
-                    {Sortby === 'Least Comments' && <svg xmlns="http://www.w3.org/2000/svg" width="13" height="11"><path fill="none" stroke="#AD1FEA" strokeWidth="2" d="M1 5.233L4.522 9 12 1"/></svg>}                    
-                  </span>
-                  
-                </li>
-                
-              </ul>
-
-            <button onClick={() => router.push('/add')} className="flex px-4 py-2  tablet:px-6 tablet:py-3 items-center bg-xFuchisia-600 hover:bg-fuchsia-500 hover:cursor-pointer  rounded-lg">
+            <button onClick={() => router.push('/add')} className="flex ml-auto px-4 py-2  tablet:px-6 tablet:py-3 items-center bg-xFuchisia-600 hover:bg-fuchsia-500 hover:cursor-pointer  rounded-lg">
               <h2 className="font-bold text-13x tablet:text-14x text-xSiolet-50 leading-20 tracking-closest ">+ Add Feedback</h2>
             </button>
 
           </header>
 
           
-          <div className={`hidden tablet:flex flex-col ${Suggestions.length < 1 ? "space-y-0 overflow-scroll": "space-y-4 overflow-y-auto"}`}>
+          <div className={`hidden tablet:flex flex-col space-y-4  tablet:h-4/5 desktop:h-full ${Suggestions.length < 1 ? "": "overflow-y-auto"}`}>
             {Suggestions.length < 1 ? <Feedback404/>  : DesktopSuggestion() }
           </div>
 
-          <div className="flex flex-col px-6 pt-8 pb-14 space-y-4 overflow-y-auto tablet:hidden">
+          <div className="flex flex-col px-6 pt-6 space-y-4 overflow-y-auto h-full tablet:hidden">
             {Suggestions.length < 1 ? <Feedback404/>  : MobileSuggestions() }
           </div>
 

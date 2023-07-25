@@ -1,8 +1,6 @@
-'use client'
-
 import { RoadmapPage, RoadmapProps } from "@/components/roadmap/roadmap-page";
 import { useProps } from "@/context/app-theme";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Roadmap(){
@@ -58,7 +56,7 @@ export default function Roadmap(){
     }
     
     return (
-        <main className="flex flex-col pt-0 px-0 pb-24 tablet:pt-14 tablet:px-10 tablet:pb-28 desktop:px-40 desktop:pt-20 desktop:pb-20 space-y-0 tablet:space-y-12 h-screen w-screen overflow-auto">
+        <main className="bg-zinc-100 flex flex-col pt-0 px-0 pb-24 tablet:pt-14 tablet:px-10 tablet:pb-28 desktop:px-40 desktop:pt-20 desktop:pb-20 space-y-0 tablet:space-y-12 h-screen w-screen overflow-auto">
             <header className="flex flex-row bg-xSlate-700 px-8 py-6 rounded-none tablet:rounded-xl">
                 <div className="flex-1 flex flex-col text-white">
                     <button onClick={() => router.back()} className="flex items-center hover:underline hover:decoration-white">
@@ -77,7 +75,7 @@ export default function Roadmap(){
                 </button>
             </header>
 
-            <section className="mobile:hidden flex-1 tablet:flex overflow-hidden space-x-8">
+            <section className="mobile:hidden flex-1 tablet:flex overflow-y-auto space-x-8">
 
                 <div className="flex flex-col w-1/3">
                     <span className="mb-8 relative">
@@ -85,7 +83,7 @@ export default function Roadmap(){
                         <p className="font-normal text-14x desktop:text-16x text-xSlate-500">Ideas prioritized for research</p>
                     </span>
 
-                    <div className="flex flex-col space-y-6 overflow-y-auto">
+                    <div className="flex flex-col space-y-6">
                         {SprintsFor("planned")}
                     </div>
                 </div>
@@ -96,7 +94,7 @@ export default function Roadmap(){
                         <p className="font-normal text-14x desktop:text-16x text-xSlate-500">Currently being developed</p>
                     </span>
 
-                    <div className="flex flex-col space-y-6  overflow-y-auto">
+                    <div className="flex flex-col space-y-6 ">
                         {SprintsFor("in-progress")}
                     </div>
                 </div>
@@ -107,7 +105,7 @@ export default function Roadmap(){
                         <p className="font-normal text-14x desktop:text-16x text-xSlate-500">Released features</p>
                     </span>
 
-                    <div className="flex flex-col space-y-6 overflow-y-auto">
+                    <div className="flex flex-col space-y-6">
                         {SprintsFor("live")}
                     </div>
                 </div>
@@ -117,13 +115,13 @@ export default function Roadmap(){
 
             <nav className="flex border-b tablet:hidden">
                 <ul className="flex-1 flex text-13x text-xSlate-500 font-bold tracking-close">
-                    <li onClick={() => SwitchViewTo("planned")} className={`${mobileView.currentView === 'planned' ? "border-b-2 border-xFuchisia-600 text-xSlate-600":"" } flex-1  py-5`}>
+                    <li onClick={() => SwitchViewTo("planned")} className={`${mobileView.currentView === 'planned' ? "border-b-4 border-xFuchisia-600 text-xSlate-600":"" } flex-1  py-5`}>
                         <h5 className="text-center">Planned&nbsp;({nPlanned})</h5>
                     </li>
-                    <li onClick={() => SwitchViewTo("in-progress")} className={`${mobileView.currentView === 'in-progress' ? "border-b-2 border-xFuchisia-600 text-xSlate-600":"" } py-5 flex-1`}>
+                    <li onClick={() => SwitchViewTo("in-progress")} className={`${mobileView.currentView === 'in-progress' ? "border-b-4 border-xFuchisia-600 text-xSlate-600":"" } py-5 flex-1`}>
                         <h5 className="text-center">In-Progress&nbsp;({nProgress})</h5>
                     </li>
-                    <li onClick={() => SwitchViewTo("live")} className={`${mobileView.currentView === 'live' ? "border-b-2 border-xFuchisia-600 text-xSlate-600":"" } flex-1 py-5  hover:`}>
+                    <li onClick={() => SwitchViewTo("live")} className={`${mobileView.currentView === 'live' ? "border-b-4 border-xFuchisia-600 text-xSlate-600":"" } flex-1 py-5  hover:`}>
                         <h5 className="text-center">Live&nbsp;({nLive})</h5>
                     </li>
                     

@@ -1,12 +1,9 @@
-'use client'
-
 import { CommentsMobile } from "@/components/detail/comments-mobile";
 import CommentsTablet from "@/components/detail/comments-tablet";
 import { useProps } from "@/context/app-theme";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { Detail } from "@/components/detail/comments-hero";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useEffect, useRef } from "react";
 
 
 
@@ -18,7 +15,8 @@ interface Inputs {
 export default  function FeedbackDetail(){
     
     const router = useRouter()
-    const {id} = useParams()
+    const id = router.query.id as string;
+
     const {datastore, setDatastore, currentUser:{name, image, username}} = useProps();
 
     const {register, watch, handleSubmit, formState: {errors}} = useForm<Inputs>({
@@ -56,13 +54,12 @@ export default  function FeedbackDetail(){
         : ev)
 
         setDatastore(updateStore)
-        console.log("comment was added")
 
     }
 
 
     return (
-        <main className="flex space-y-6 px-6 pt-6 pb-20 tablet:px-10 tablet:pt-14 tablet:pb-28 desktop:px-96 desktop:pb-36 desktop:pt-20 h-screen w-screen overflow-scroll">
+        <main className="bg-zinc-100 flex space-y-6 px-6 pt-6 pb-20 tablet:px-10 tablet:pt-14 tablet:pb-28 desktop:px-96 desktop:pb-36 desktop:pt-20 h-screen w-screen overflow-y-auto overflow-x-visible">
             <div className="flex-1 flex-col space-y-6 ">
                 
                 <section className="flex flex-col space-y-6">
@@ -88,11 +85,11 @@ export default  function FeedbackDetail(){
 
 {/* comment section starts here */}
 
-                <section className={`flex-none flex flex-col rounded-xl bg-white py-8 px-6 ${nComments < 1 ? "h-none" : "h-3/5"}`}>
+                <section className={`flex-none flex flex-col rounded-xl bg-white py-8 px-6 ${nComments < 1 ? "h-3/6" : "h-full"}`}>
 
                     <p className="relative mt-6 leading-26 tracking-closer text-18x font-bold text-xSlate-600 pb-4">{nComments}&nbsp;{nComments < 2 ? "Comment": "Comments"}</p>
 
-                    <div className="hidden tablet:flex flex-col overflow-y-auto divide-y divide-slate-100">
+                    <div className="hidden tablet:flex flex-col overflow-y-auto divide-y divide-slate-100 h-full">
                         { nComments > 0 ?  <CommentsTablet id={id}/>: <div className="text-16x font-semibold text-xSlate-500">Tell us what you think </div>}
                     </div>
 

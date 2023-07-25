@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'Jost';
+    src: url("/static/fonts/JostVariable.ttf") format("truetype");
+  }
+
+
+html{
+    font-family: "Jost";
+}
+
+
+
+.bg-image-desktop{
+    background: url('/assets/suggestions/desktop/background-header.png');
+    background-size: cover;
+
+}
+.bg-image-tablet{
+    background-size: cover;
+    background: url('/assets/suggestions/mobile/background-header.png');
+}
+
+.bg-image-mobile{
+    background: url('/assets/suggestions/tablet/background-header.png');
+    background-size: cover;
+}
